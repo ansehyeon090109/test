@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>간단한 쇼핑몰 만들기</title>
+    <style>
+        body {
+            background-color: rgb(255, 255, 255);
+            margin: 0;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            color: azure;
+            background-color: rgb(22, 21, 21);
+            height: 60px;
+            z-index: 1000;
+            padding-left: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav {
+            position: fixed;
+            top: 60px; 
+            left: 0;
+            right: 0;
+            background-color: #222;
+            display: flex;
+            padding: 20px;
+            z-index: 999;
+        }
+
+        input {
+            margin: 5px;
+            width: 300px;
+            height: 30px;
+            border-radius: 5px;
+        }
+        a{
+            text-decoration: none;
+        }
+        .sidebar {
+            position: sticky;
+            border-radius: 0px 0px 15px 0px;
+            padding: 20px;
+            margin-top: 20px ;
+            height: 280px;
+            width: 200px;
+            float: left;
+            background-color: #1a1a1a;
+        }
+
+        .sidebar-top-text {
+            font-size: 20px;
+            color: aliceblue;
+            font-weight: bolder;
+        }
+
+        .sidebar-text {
+            font-weight: bolder;
+            font-size: 15px;
+            cursor: pointer;
+            color: aliceblue;
+        }
+
+        .content {
+            margin-top: 120px; 
+            overflow: hidden; 
+        }
+
+        main {
+            display: flex;
+        }
+
+        img {
+            width: 340px;
+            height: 240px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .product:hover {
+            transition: transform 0.2s ease-in-out;
+            transform: scale(1.01);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bolder;
+            margin-left: 40px;
+        }
+
+        nav span {
+            cursor: pointer;
+            margin: 5px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: aliceblue;
+            background-color: #333;
+            transition: background-color 0.3s;
+        }
+
+        nav span:hover {
+            background-color: #444;
+        }
+
+        h4 {
+            color: aliceblue;
+            font-weight: bolder;
+            padding-left: 20px;
+        }
+
+        .product {
+            display: flex; 
+            flex-wrap: wrap;
+            margin-top: 40px;
+            margin-left: 70px;
+            height: 300px;
+            width: 340px;
+            background-color: #222;
+            border-radius: 15px;
+        }
+
+        .product-text {
+            color: azure;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <span class="logo">NOSINSA</span>
+</header>
+
+<nav>
+    <div class="menu-icon"></div><br >
+    <input type="text" placeholder="검색">
+    <span>추천</span>
+    <span>세일</span>
+    <span>브랜드</span>
+    <span>랭킹</span>
+</nav>
+
+<div class="content">
+    <aside class="sidebar">
+        <br>
+        <span class="sidebar-top-text">카테고리</span><br><br><br>
+        <span class="sidebar-text">아우터</span><br><br>
+        <span class="sidebar-text">바지</span><br><br>
+        <span class="sidebar-text">신발</span><br><br>
+        <span class="sidebar-text">가방</span><br><br>
+        <span class="sidebar-text">악세서리</span>
+    </aside>
+
+    <main>
+        <div>
+            <a href="신발.html">
+                <div class="product">
+                    <img src="신발.jpg" >
+                    <h4>새로나온 신발</h4>
+                </div>
+            </a>
+            <div class="product">
+                <img src="노시계.jpg" />
+                <h4>신규 악세서리</h4>
+            </div>
+        </div>
+        <div>
+            <div class="product">
+                <img src="아우터.jpg" />
+                <h4>아우터</h4>
+            </div>
+            <div class="product">
+                <img src="바지.jpg" />
+                <h4>여름 바지 추천!!</h4>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

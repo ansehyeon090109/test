@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>간단한 달력 만들기</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #e6f7ff;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #3399cc;
+    }
+
+    table {
+      border-spacing: 10px;
+      margin: 0 auto;
+    }
+
+    th, td {
+      width: 1%;
+      height: 50px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    th {
+      font-size: 30px;
+      font-family: 'Courier New', Courier, monospace;
+      color: #00a4f6ba;
+      background-color: #abe7ff;
+    }
+
+    td {
+      font-size: 20px;
+      background-color: #ffffff;
+    }
+
+    textarea {
+      border: none;
+      resize: none;
+      text-align: center;
+      font-size: 20px;
+      width: 100%;
+      height: 70px;
+      border-radius: 10px;
+      background-color: #f2fbff;
+    }
+
+    .todo-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 60px;
+    }
+
+    .calendar-todo-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .calendar-area {
+      width: 800px;
+    }
+
+    .todo-box {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 1200px; 
+      margin-top: 40px;
+      height: 500px; 
+    }
+
+    .todo-box h2 {
+      text-align: center;
+      color: #3399cc;
+      margin-bottom: 20px;
+    }
+
+    
+    .todo-box li {
+      display: flex;
+      align-items: center;
+      background-color: #f0faff;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .todo-box input[type="checkbox"] {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #4da6ff;
+      border-radius: 50%;
+      background-color: #fff;
+      margin-right: 12px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .todo-box input[type="checkbox"]:checked::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 12px;
+      height: 12px;
+      background-color: #4da6ff;
+      border-radius: 50%;
+    }
+
+    .todo-box input {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-size: 16px;
+      color: #333;
+      height: 50px;
+      padding: 6px ;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌤️ 5월달 계획표</h1>
+
+  <div style="text-align: center; display: inline-block;">
+    <table>
+      <thead>
+        <tr>
+          <th>일</th>
+          <th>월</th>
+          <th>화</th>
+          <th>수</th>
+          <th>목</th>
+          <th>금</th>
+          <th>토</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td><td></td><td></td><td></td>
+          <td>1<textarea></textarea></td>
+          <td>2<textarea></textarea></td>
+          <td>3<textarea></textarea></td>
+        </tr>
+        <tr>
+          <td>4<textarea></textarea></td>
+          <td>5<textarea></textarea></td>
+          <td>6<textarea></textarea></td>
+          <td>7<textarea></textarea></td>
+          <td>8<textarea></textarea></td>
+          <td>9<textarea></textarea></td>
+          <td>10<textarea></textarea></td>
+        </tr>
+        <tr>
+          <td>11<textarea></textarea></td>
+          <td>12<textarea></textarea></td>
+          <td>13<textarea></textarea></td>
+          <td>14<textarea></textarea></td>
+          <td>15<textarea></textarea></td>
+          <td>16<textarea></textarea></td>
+          <td>17<textarea></textarea></td>
+        </tr>
+        <tr>
+          <td>18<textarea></textarea></td>
+          <td>19<textarea></textarea></td>
+          <td>20<textarea></textarea></td>
+          <td>21<textarea></textarea></td>
+          <td>22<textarea></textarea></td>
+          <td>23<textarea></textarea></td>
+          <td>24<textarea></textarea></td>
+        </tr>
+        <tr>
+          <td>25<textarea></textarea></td>
+          <td>26<textarea></textarea></td>
+          <td>27<textarea></textarea></td>
+          <td>28<textarea></textarea></td>
+          <td>29<textarea></textarea></td>
+          <td>30<textarea></textarea></td>
+          <td>31<textarea></textarea></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="todo-wrapper">
+      <div class="todo-box">
+        <h1> 📝 오늘의 할 일</h1>
+        <ul>
+          <li>
+            <input type="checkbox" >
+            <input type="text" placeholder="할 일 1 입력" >
+          </li>
+          <li>
+            <input type="checkbox" >
+            <input type="text" placeholder="할 일 2 입력">
+          </li>
+          <li>
+            <input type="checkbox">
+            <input type="text" placeholder="할 일 3 입력" >
+          </li>
+          <li>
+            <input type="checkbox" >
+            <input type="text" placeholder="할 일 4 입력" >
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
