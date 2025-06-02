@@ -1,0 +1,146 @@
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+    <meta charset="UTF-8" />
+    <title>발전기 과학 프로젝트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+        box-sizing: border-box;
+        }
+
+        html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Noto Sans KR', sans-serif;
+        scroll-behavior: smooth;
+        background-color: #f0f4f3;
+        color: #2e2e2e;
+        }
+
+        header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: #4caf50;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        z-index: 100;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        aside {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 180px;
+        height: calc(100% - 1000pxs);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-right: 1px solid #ddd;
+        z-index: 99;
+        }
+
+        aside a {
+        width: 140px;
+        margin: 10px 0;
+        padding: 12px 16px;
+        text-decoration: none;
+        color: #333;
+        background: #e8f5e9;
+        border-radius: 8px;
+        font-weight: 500;
+        text-align: center;
+        transition: all 0.3s;
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+        }
+
+        aside a:hover {
+        background: #c8e6c9;
+        transform: translateY(-2px);
+        }
+
+        main {
+        margin-left: 180px;
+        padding-top: 80px;
+        }
+
+        section {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        scroll-snap-align: start;
+        }
+
+        section img {
+        width: 60%;
+        width: 500px;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        margin-top: 20px;
+        }
+
+        section h2 {
+        font-size: 32px;
+        margin-bottom: 10px;
+        }
+
+        section p {
+        font-size: 18px;
+        text-align: center;
+        max-width: 600px;
+        line-height: 1.6;
+        }
+
+        html {
+        scroll-snap-type: y mandatory;
+        }
+    </style>
+    </head>
+    <body>
+
+    <header>발전기 과학 프로젝트</header>
+
+    <aside>
+    <a href="#s1">과일전지</a>
+    <a href="#s2">수력 발전</a>
+    <a href="#s3">태양열 패널</a>
+    </aside>
+
+    <main>
+    <section id="s1">
+        <h2>과일전지</h2>
+        <p>과일을 이용해 전기를 생산, 종류별 전기 생산량을 </p>
+        <img src="과일.jpg" alt="과일전지 이미지">
+    </section>
+
+    <section id="s2">
+        <h2>수력 발전</h2>
+        <p>물의 힘으로 전기를 만드는 수력 발전의 원리</p>
+        <img src="수력발전.jpg" alt="수력발전 이미지">
+    </section>
+
+    <section id="s3">
+        <h2>태양열 패널</h2>
+        <p>햇빛을 전기로 바꾸는 태양광 패널의 구조와 장점을 탐구</p>
+        <img src="태양광.jpg" alt="태양열 이미지">
+    </section>
+    </main>
+
+    </body>
+    </html>

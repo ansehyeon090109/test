@@ -46,7 +46,7 @@
             text-decoration: none;
         }
         .sidebar {
-            position: sticky;
+            position: fixed;
             border-radius: 0px 0px 15px 0px;
             padding: 20px;
             margin-top: 20px ;
@@ -75,6 +75,8 @@
         }
 
         main {
+            margin-top: 10px;
+            margin-left: 200px;
             display: flex;
         }
 
@@ -95,7 +97,7 @@
             margin-left: 40px;
         }
 
-        nav span {
+        .nav_span {
             cursor: pointer;
             margin: 5px;
             padding: 8px 15px;
@@ -105,7 +107,7 @@
             transition: background-color 0.3s;
         }
 
-        nav span:hover {
+        .nav_span:hover {
             background-color: #444;
         }
 
@@ -130,6 +132,12 @@
             color: azure;
             font-size: 10px;
         }
+        .login{
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 450px;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -141,10 +149,13 @@
 <nav>
     <div class="menu-icon"></div><br >
     <input type="text" placeholder="검색">
-    <span>추천</span>
-    <span>세일</span>
-    <span>브랜드</span>
-    <span>랭킹</span>
+    <span class="nav_span">추천</span>
+    <span class="nav_span">세일</span>
+    <span class="nav_span">브랜드</span>
+    <span class="nav_span">랭킹</span>
+    <a href="로그인 페이지.html" style="margin-top: 20px;">
+        <span class="login">로그인</span>
+    </a>
 </nav>
 
 <div class="content">
@@ -172,10 +183,12 @@
             </div>
         </div>
         <div>
-            <div class="product">
-                <img src="아우터.jpg" />
-                <h4>아우터</h4>
-            </div>
+            <a href="아우터.html">
+                <div class="product">
+                    <img src="아우터.jpg" />
+                    <h4>아우터</h4>
+                </div>
+            </a>
             <div class="product">
                 <img src="바지.jpg" />
                 <h4>여름 바지 추천!!</h4>

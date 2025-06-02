@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>윈터 퀴즈</title>
+    <style>
+        body{
+            background-color: rgb(242, 228, 255);
+        }
+        img{
+            margin: 20px;
+            border-radius: 10px;
+            float: left;
+            width: 200px;
+            height: 300px;
+        }
+        aside{
+            border-radius: 10px;
+        }
+        .t {
+            background-color: rgb(231, 206, 255);
+            box-shadow: 1px 1px 15px 4px rgb(185, 45, 255);
+            justify-self: center;
+            text-align: center;
+            border-radius: 15px;
+            width: 400px;
+            height: 500px;
+            background-color: rgb(211, 168, 251);
+            justify-content: center;
+            align-items: center;
+        }
+        .a1 {
+            color: aliceblue;
+            border: 0px;
+            margin-top: 10px;
+            margin-bottom: 40px;
+            border-radius: 15px;
+            width: 340px;
+            height: 70px;
+            background-color: rgb(198, 85, 255);
+            font-size: 20px;
+        }
+        .t1 {
+            color: aliceblue;
+            border: 0px;
+            margin-top: 10px;
+            border-radius: 15px;
+            width: 300px;
+            height: 70px;
+            background-color: rgb(189, 118, 255);
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="adad">
+            <a href="퀴즈 게임.html">
+                <img src="winter.jpg">
+            </a>
+        </div>
+    </aside>
+    <div class="t">
+        <button class="a1">윈터</button>
+        <button class="t1" onclick="quiz()">윈터의 생일</button>
+        <button class="t1" onclick="quiz2()">에스파 데뷔일</button>
+        <button class="t1" onclick="quiz3()">윈터가 태어난곳</button>
+    </div>
+
+
+    <script>
+
+        let count = 0;
+        function quiz() {
+            let answer = prompt("윈터의 생일은? (예: 20090109)")
+            if (answer === "20010101") {
+                alert("정답이다! ")
+                count = 1;
+            } else {
+                alert("틀렸다. 정답은 2001년 1월 1일이다")
+                count = 0;
+                chance++;
+                count_()
+            }
+        }
+        function quiz2() {
+            let answer = prompt("에스파 데뷔일? (예: 20090109)")
+            if (answer === "20201117") {
+                alert("정답이다! ")
+                count =1;
+            } else {
+                alert("틀렸다. 정답은 20201117, 2020년 1월 17일이다")
+                chance++;
+                count = 0;
+                count_()
+            }
+        }
+
+        function quiz3() {
+            let answer = prompt("윈터가 태어난곳은? (예:Seoul)")
+            if (answer === "Busan") {
+                alert("정답이다! ")
+                count = 1;
+            } else {
+                alert("틀렸다. 정답은 Busan 부산이다")
+                chance++;
+                count=0;
+                count_()
+            }
+        }
+        function count_(){
+            if (count === 0 && chance>3){
+                alert("왤케 쳐 틀림? 뒤질레?");
+                location.assign="준서.html";
+            }
+        }
+    </script>
+</body>
+</html>
