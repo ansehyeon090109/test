@@ -2,33 +2,45 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>할 일 체크앱</title>
+  <title>디지털 시계</title>
   <style>
-    body { background: #0d1117; color: #fff; font-family: sans-serif; padding: 2rem; }
-    h2 { color: #58a6ff; }
-    input { width: 70%; padding: 0.6rem; border-radius: 8px; border: none; background: #161b22; color: white; }
-    button { padding: 0.6rem 1rem; background: #238636; color: white; border: none; border-radius: 8px; margin-left: 1rem; }
-    li { margin: 0.5rem 0; cursor: pointer; }
-    li.checked { text-decoration: line-through; color: #888; }
+    body {
+      background: #1e1e2f;
+      color: #fff;
+      text-align: center;
+      font-family: 'Pretendard', sans-serif;
+      padding-top: 100px;
+    }
+    #clock {
+      font-size: 5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    #greeting {
+      font-size: 2rem;
+      color: #f0c674;
+    }
   </style>
 </head>
 <body>
-  <h2>📌 오늘 할 일</h2>
-  <input id="todoInput" placeholder="할 일을 입력해봐">
-  <button onclick="addTodo()">추가</button>
-  <ul id="todoList"></ul>
+  <div id="clock">00:00</div>
+  <div id="greeting">안녕!</div>
 
   <script>
-    function addTodo() {
-      const input = document.getElementById('todoInput');
-      const text = input.value.trim();
-      if (!text) return;
-      const li = document.createElement('li');
-      li.textContent = text;
-      li.onclick = () => li.classList.toggle('checked');
-      document.getElementById('todoList').appendChild(li);
-      input.value = '';
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').innerText = `${h}:${m}`;
+
+      let g = '';
+      if (now.getHours() < 12) g = "좋은 아침이야!";
+      else if (now.getHours() < 18) g = "좋은 하루 보내!";
+      else g = "좋은 저녁이야!";
+      document.getElementById('greeting').innerText = g;
     }
+    setInterval(updateClock, 1000);
+    updateClock();
   </script>
 </body>
 </html>
