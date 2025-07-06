@@ -2,47 +2,33 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>가사 노트</title>
+  <title>할 일 체크앱</title>
   <style>
-    body { background: #121212; color: #eee; font-family: sans-serif; padding: 2rem; }
-    h2 { color: #ff6f61; }
-    input, textarea { width: 100%; margin: 0.5rem 0; padding: 0.8rem; border: none; border-radius: 10px; background: #2a2a2a; color: white; }
-    button { background: #ff6f61; color: #fff; padding: 0.6rem 1.2rem; border: none; border-radius: 10px; font-weight: bold; }
-    .note { background: #1e1e1e; padding: 1rem; border-radius: 10px; margin: 1rem 0; }
+    body { background: #0d1117; color: #fff; font-family: sans-serif; padding: 2rem; }
+    h2 { color: #58a6ff; }
+    input { width: 70%; padding: 0.6rem; border-radius: 8px; border: none; background: #161b22; color: white; }
+    button { padding: 0.6rem 1rem; background: #238636; color: white; border: none; border-radius: 8px; margin-left: 1rem; }
+    li { margin: 0.5rem 0; cursor: pointer; }
+    li.checked { text-decoration: line-through; color: #888; }
   </style>
 </head>
 <body>
-  <h2>🎧 나만의 가사 노트</h2>
-  <input id="title" placeholder="노래 제목을 입력해봐">
-  <textarea id="lyrics" placeholder="인상 깊은 가사 내용을 적어봐"></textarea>
-  <button onclick="saveNote()">저장</button>
-
-  <div id="noteList"></div>
+  <h2>📌 오늘 할 일</h2>
+  <input id="todoInput" placeholder="할 일을 입력해봐">
+  <button onclick="addTodo()">추가</button>
+  <ul id="todoList"></ul>
 
   <script>
-    function saveNote() {
-      const t = document.getElementById('title').value;
-      const l = document.getElementById('lyrics').value;
-      if (!t || !l) return;
-
-      let saved = JSON.parse(localStorage.getItem('notes') || '[]');
-      saved.unshift({ t, l });
-      localStorage.setItem('notes', JSON.stringify(saved));
-      document.getElementById('title').value = '';
-      document.getElementById('lyrics').value = '';
-      renderNotes();
+    function addTodo() {
+      const input = document.getElementById('todoInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const li = document.createElement('li');
+      li.textContent = text;
+      li.onclick = () => li.classList.toggle('checked');
+      document.getElementById('todoList').appendChild(li);
+      input.value = '';
     }
-
-    function renderNotes() {
-      let notes = JSON.parse(localStorage.getItem('notes') || '[]');
-      const div = document.getElementById('noteList');
-      div.innerHTML = '';
-      for (let n of notes) {
-        div.innerHTML += `<div class="note"><strong>${n.t}</strong><br>${n.l}</div>`;
-      }
-    }
-
-    renderNotes();
   </script>
 </body>
 </html>
