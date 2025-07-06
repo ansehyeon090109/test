@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html>
-<head><title>커밋 3</title></head>
+<head>
+  <title>커밋 8</title>
+  <style>
+    .fadein {
+      animation: fade 2s ease-in-out infinite;
+    }
+    @keyframes fade {
+      0% {opacity: 0;}
+      50% {opacity: 1;}
+      100% {opacity: 0;}
+    }
+  </style>
+</head>
 <body>
-  <h1>버튼 있는 커밋</h1>
-  <button onclick="alert('Hi!')">눌러봐</button>
+  <h1 class="fadein">깜빡이는 텍스트</h1>
 </body>
 </html>
