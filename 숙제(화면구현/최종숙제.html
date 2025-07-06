@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>감정 일기장</title>
+  <style>
+    body {
+      background: #1c1c1e;
+      color: #fff;
+      font-family: 'Pretendard', sans-serif;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #f39c12;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      border: none;
+      border-radius: 10px;
+      padding: 1rem;
+      background: #2c2c2e;
+      color: #fff;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+    select, button {
+      padding: 0.5rem 1rem;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: #f39c12;
+      color: #1c1c1e;
+      font-weight: bold;
+    }
+    #entries {
+      margin-top: 2rem;
+    }
+    .entry {
+      background: #2c2c2e;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>오늘의 감정 일기</h1>
+  <select id="feeling">
+    <option value="😊">😊 행복</option>
+    <option value="😢">😢 슬픔</option>
+    <option value="😡">😡 화남</option>
+    <option value="😴">😴 피곤</option>
+    <option value="💖">💖 설렘</option>
+  </select><br>
+  <textarea id="diary" placeholder="무슨 일이 있었니?"></textarea><br>
+  <button onclick="saveEntry()">저장하기</button>
+
+  <div id="entries"></div>
+
+  <script>
+    const entriesDiv = document.getElementById('entries');
+
+    function saveEntry() {
+      const feeling = document.getElementById('feeling').value;
+      const text = document.getElementById('diary').value;
+      const date = new Date().toLocaleDateString();
+
+      const entry = { feeling, text, date };
+      let saved = JSON.parse(localStorage.getItem('entries') || '[]');
+      saved.unshift(entry);  // 최신순 정렬
+      localStorage.setItem('entries', JSON.stringify(saved));
+      showEntries();
+      document.getElementById('diary').value = '';
+    }
+
+    function showEntries() {
+      const saved = JSON.parse(localStorage.getItem('entries') || '[]');
+      entriesDiv.innerHTML = '';
+      for (let e of saved) {
+        entriesDiv.innerHTML += `
+          <div class="entry">
+            <strong>${e.date} ${e.feeling}</strong><br>
+            ${e.text}
+          </div>
+        `;
+      }
+    }
+
+    showEntries();  // 페이지 로드시 보여줌
+  </script>
+</body>
+</html>
