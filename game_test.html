@@ -1,10 +1,106 @@
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  canvas {
-    max-width: 100%;
-    height: auto;
-  }
-</style>
-<footer style="text-align:center; padding:20px; font-size:14px;">
-  © 2025 CoinMarket Project
-</footer>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>코인 시세</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1f2937;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+    #btc-price {
+      font-size: 24px;
+      color: green;
+      padding: 20px;
+    }
+    .chart-container {
+      padding: 20px;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>CoinMarket</h2>
+    <nav>
+      <a href="#">가상자산</a>
+      <a href="#">투자내역</a>
+      <input type="text" placeholder="검색 🔍" />
+    </nav>
+  </header>
+
+  <div id="btc-price">비트코인 시세: 불러오는 중...</div>
+
+  <div class="chart-container">
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <footer>
+    © 2025 CoinMarket Project
+  </footer>
+
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'BTC/USD',
+          data: [],
+          borderColor: 'green',
+          tension: 0.3
+        }]
+      }
+    });
+
+    async function loadChartData() {
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1');
+      const json = await res.json();
+      const prices = json.prices;
+
+      const labels = prices.map(p => new Date(p[0]).toLocaleTimeString());
+      const data = prices.map(p => p[1]);
+
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = data;
+      chart.update();
+    }
+
+    async function loadBTCPrice() {
+      const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+      const data = await res.json();
+      document.getElementById('btc-price').innerText = `현재 비트코인 시세: $${data.bitcoin.usd.toLocaleString()} USD`;
+    }
+
+    loadChartData();
+    loadBTCPrice();
+    setInterval(loadBTCPrice, 20000);
+  </script>
+</body>
+</html>
