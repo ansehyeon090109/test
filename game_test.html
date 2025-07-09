@@ -1,86 +1,63 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>업비트 스타일 코인 시세</title>
+  <title>Coin Market</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
+      background-color: white;
       margin: 0;
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: #ffffff;
-      color: #222;
+      padding: 0;
     }
-
     header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      height: 70px;
-      background-color: #1f2937;
-      color: white;
+      margin: 0;
+      background: linear-gradient(to right, #0047ab, #3a5efe);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      z-index: 1000;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #00c73c; /* 포인트 색상 */
-    }
-
-    .menu {
-      display: flex;
+      padding: 0 20px;
       gap: 20px;
+      height: 100px;
     }
-
-    .menu span {
-      cursor: pointer;
+    .menu {
+      color: white;
+      font-size: 18px;
     }
-
-    .btc_price {
-      font-size: 36px;
-      font-weight: bold;
-      color: #00c73c;
-      padding: 100px 40px 10px;
+    .logo {
+      padding-left: 100px;
+      font-size: 50px;
+      font-weight: bolder;
+      color: white;
     }
-
-    .chart-container {
-      padding: 0 40px 40px;
-    }
-
     canvas {
-      width: 100% !important;
-      height: 400px !important;
+      width: 100%;
+      height: 400px;
     }
-
-    input[type="text"] {
-      padding: 6px 10px;
-      border-radius: 4px;
-      border: none;
+    .chart {
+      width: 100vh;
+      height: 50vh;
     }
-
+    .btc_price{
+      font-size: 50px;
+    }
+    .div_btc_price{
+      background-color: rgb(188, 187, 187);
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">CoinMarket</div>
-    <div class="menu">
-      <span>가상자산</span>
-      <span>투자내역</span>
-      <input type="text" placeholder="검색 🔍"/>
-    </div>
+    <span class="logo">CoinMarket</span>
+    <span class="menu">가상자산</span>
+    <span class="menu">투자내역</span>
+    <input type="text" placeholder="✓검색" />
   </header>
-
-  <div class="btc_price" id="btc-price">현재 비트코인 시세: 불러오는 중...</div>
-
-  <div class="chart-container">
-    <canvas id="myChart"></canvas>
+  <div class="div_btc_price">
+    <span id="btc-price" class="btc_price"></span>
+  </div>
+  <div class="chart">
+    <canvas id="myChart" ></canvas>
   </div>
 
   <script>
@@ -92,32 +69,21 @@
         datasets: [{
           label: 'BTC/USD',
           data: [],
-          borderColor: '#00c73c',
-          pointRadius: 0,
-          tension: 0.2,
-          borderWidth: 2,
-          fill: false
+          borderColor: 'green',
+          pointRadius: 2,
+          tension: 0.3
         }]
       },
       options: {
         responsive: true,
         plugins: {
-          legend: { display: false },
           tooltip: { enabled: true }
-        },
-        scales: {
-          x: {
-            ticks: { maxTicksLimit: 10 }
-          },
-          y: {
-            beginAtZero: false
-          }
         }
       }
     });
 
     async function loadChartData() {
-      const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1&interval=hourly');
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7');
       const json = await res.json();
       const prices = json.prices;
 
@@ -125,30 +91,29 @@
       const data = [];
 
       prices.forEach(entry => {
-        const date = new Date(entry[0]);
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        labels.push(`${hours}:${minutes}`);
-        data.push(entry[1]);
+        const timestamp = entry[0];
+        const price = entry[1];
+        const label = new Date(timestamp).toLocaleDateString();
+        labels.push(label);
+        data.push(price);
       });
 
       chart.data.labels = labels;
       chart.data.datasets[0].data = data;
       chart.update();
     }
-
-    async function showBTCPrice() {
+      async function showBTCPrice() {
       const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
       const json = await res.json();
       const price = json.bitcoin.usd;
 
       document.getElementById('btc-price').innerText = `현재 비트코인 시세: $${price.toLocaleString()} USD`;
-    }
-
+}
     loadChartData();
     showBTCPrice();
 
-    setInterval(showBTCPrice, 20000); // 20초마다 가격 갱신
+    setInterval(showBTCPrice, 20000); 
+    loadChartData();
   </script>
 </body>
 </html>
