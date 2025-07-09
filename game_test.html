@@ -5,6 +5,23 @@
     <a href="#">투자내역</a>
     <input type="text" placeholder="코인 이름 검색" />
     <div id="btc-price">비트코인 시세: 불러오는 중...</div>
+    <canvas id="myChart" width="600" height="300"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('myChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['1월', '2월', '3월'],
+      datasets: [{
+        label: '가격',
+        data: [100, 200, 300],
+        borderColor: 'green',
+        tension: 0.3
+      }]
+    }
+  });
+</script>
 
   </nav>
 </header>
