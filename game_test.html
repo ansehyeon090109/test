@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BTC</title>
+  <title>COINMARKET</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
@@ -54,6 +54,11 @@
       justify-content: space-between;
       padding: 10px 0;
       border-bottom: 1px solid #eee;
+      cursor: pointer;
+    }
+
+    .coin-row:hover {
+      background-color: #f1f1f1;
     }
 
     .price-up {
@@ -69,14 +74,14 @@
       padding-left: 40px;
     }
 
-    #btc-price {
+    #coin-price {
       font-size: 24px;
       margin-bottom: 10px;
     }
 
     canvas {
       width: 120%;
-      height: 400px ;
+      height: 400px;
     }
   </style>
 </head>
@@ -96,13 +101,19 @@
     </div>
 
     <div class="chart-area">
-      <div id="btc-price">BTC 가격: 불러오는 중...</div>
-      <canvas id="btcChart"></canvas>
+      <div id="coin-price">코인 가격: 불러오는 중...</div>
+      <canvas id="coinChart"></canvas>
     </div>
   </div>
 
   <script>
     const coins = ['bitcoin', 'ethereum', 'solana'];
+    let chartInstance = null;
+    let coinMap = {
+      bitcoin: 'BTC',
+      ethereum: 'ETH',
+      solana: 'SOL'
+    };
 
     async function fetchPrices() {
       const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coins.join(",")}&vs_currencies=usd&include_24hr_change=true`);
@@ -115,32 +126,45 @@
         const change = data[coin].usd_24h_change;
         const changeClass = change >= 0 ? 'price-up' : 'price-down';
 
-        list.innerHTML += `
-          <div class="coin-row">
-            <span>${coin.toUpperCase()}</span>
-            <span>$${price.toLocaleString()}</span>
-            <span class="${changeClass}">${change.toFixed(2)}%</span>
-          </div>
+        const row = document.createElement('div');
+        row.className = 'coin-row';
+        row.innerHTML = `
+          <span>${coinMap[coin]}</span>
+          <span>$${price.toLocaleString()}</span>
+          <span class="${changeClass}">${change.toFixed(2)}%</span>
         `;
+        row.addEventListener('click', () => {
+          drawChart(coin);
+          document.getElementById('coin-price').innerText = `${coinMap[coin]} 가격: $${price.toLocaleString()} (${change.toFixed(2)}%)`;
+        });
+
+        list.appendChild(row);
       });
 
-      document.getElementById('btc-price').innerText = `BTC 가격: ${data.bitcoin.usd.toLocaleString()} (${data.bitcoin.usd_24h_change.toFixed(2)}%)`;
+      // 첫 실행 시 BTC 표시
+      drawChart('bitcoin');
+      document.getElementById('coin-price').innerText =
+        `BTC 가격: $${data.bitcoin.usd.toLocaleString()} (${data.bitcoin.usd_24h_change.toFixed(2)}%)`;
     }
 
-    async function drawBTCChart() {
-      const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1');
+    async function drawChart(coin) {
+      const res = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=1`);
       const data = await res.json();
       const prices = data.prices;
 
       const labels = prices.map(p => new Date(p[0]).toLocaleTimeString());
       const values = prices.map(p => p[1]);
 
-      new Chart(document.getElementById('btcChart').getContext('2d'), {
+      if (chartInstance) {
+        chartInstance.destroy(); // 이전 차트 제거
+      }
+
+      chartInstance = new Chart(document.getElementById('coinChart').getContext('2d'), {
         type: 'line',
         data: {
           labels: labels,
           datasets: [{
-            label: 'BTC/USD',
+            label: `${coinMap[coin]}/USD`,
             data: values,
             borderColor: '#00c73c',
             borderWidth: 2,
@@ -152,6 +176,7 @@
           plugins: {
             legend: { display: false }
           },
+          animation: false,
           scales: {
             x: { display: false },
             y: {
@@ -165,7 +190,6 @@
     }
 
     fetchPrices();
-    drawBTCChart();
     setInterval(fetchPrices, 20000); 
   </script>
 </body>
