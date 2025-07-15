@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CoinM</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+    margin:0; background:#121212; color:#eee; display:flex; height:100vh; font-family: sans-serif;
+  }
+  .sidebar {
+    width: 240px; background:#1f1f1f; padding:30px 20px; box-sizing:border-box; display:flex; flex-direction:column; box-shadow:2px 0 8px rgba(0,0,0,0.7);
+  }
+  .sidebar h2 {
+    margin:0 0 30px 0; font-weight:700; font-size:24px; color:#4caf50;
+  }
+  .sidebar a {
+    color:#bbb; text-decoration:none; font-size:16px; margin-bottom:15px; transition:color 0.3s;
+  }
+  .sidebar a:hover {
+    color:#4caf50;
+  }
+  main {
+    flex:1; padding:30px; overflow-y:auto; box-sizing:border-box; display:flex; flex-direction:column;
+  }
+  .header {
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;
+  }
+  .header input {
+    width:300px; padding:8px 12px; border-radius:8px; border:none; outline:none; font-size:16px;
+  }
+  .header .user-label {
+    font-weight:700; color:#4caf50;
+  }
+  .portfolio-area {
+    background:#1e1e1e; border-radius:12px; padding:20px; box-shadow:0 4px 15px rgba(76,175,80,0.3);
+  }
+  .portfolio-area h3 {
+    margin-top:0; margin-bottom:15px; font-weight:700; color:#4caf50;
+  }
+  .coin-list {
+    display:flex; gap:15px; overflow-x:auto; padding-bottom:10px;
+  }
+  .coin-item {
+    background:#2c2c2c; border-radius:10px; min-width:140px; padding:15px; text-align:center; cursor:pointer; color:#ccc; transition:background 0.3s;
+  }
+  .coin-item:hover {
+    background:#4caf50; color:#121212;
+  }
+  .coin-item strong {
+    display:block; font-size:18px; margin-bottom:8px;
+  }
+  .coin-item .price {
+    font-size:16px; margin-bottom:6px;
+  }
+  .coin-item .change-rate {
+    font-weight:700; font-size:14px;
+  }
+  .change-positive {
+    color:#4caf50;
+  }
+  .change-negative {
+    color:#e53935;
+  }
+  .chart-area, .wallet-chart-area {
+    background:#1e1e1e; margin-top:30px; border-radius:12px; padding:20px; box-shadow:0 4px 15px rgba(76,175,80,0.3);
+  }
+  .chart-area h3, .wallet-chart-area h3 {
+    margin-top:0; color:#4caf50; font-weight:700; margin-bottom:10px;
+  }
+  canvas {
+    width: 100% !important;
+    height: 320px !important;
+  }
+  .settings-area {
+    background:#1e1e1e; margin-top:30px; border-radius:12px; padding:20px; box-shadow:0 4px 15px rgba(76,175,80,0.3);
+    color:#ccc;
+  }
+  .settings-area h3 {
+    margin-top:0; color:#4caf50; font-weight:700; margin-bottom:15px;
+  }
+  .setting-row {
+    margin-bottom:15px;
+  }
+  select, button {
+    padding:8px 12px; border-radius:6px; border:none; outline:none; font-size:16px;
+    background:#333; color:#eee; cursor:pointer;
+  }
+  select:hover, button:hover {
+    background:#4caf50; color:#121212;
+  }
+  .wallet-area {
+    background:#1e1e1e; margin-top:30px; border-radius:12px; padding:20px; box-shadow:0 4px 15px rgba(76,175,80,0.3);
+    color:#ccc;
+    max-height:400px; overflow-y:auto;
+  }
+  .wallet-area h3 {
+    margin-top:0; color:#4caf50; font-weight:700; margin-bottom:10px;
+  }
+  .wallet-list {
+    list-style:none; padding:0; margin:0;
+  }
+  .wallet-list li {
+    padding:10px 0; border-bottom:1px solid #333; display:flex; justify-content:space-between;
+    font-size:14px;
+  }
+  .wallet-list li span {
+    display:inline-block; min-width:80px;
+  }
+  .btn-reset {
+    margin-top:15px; background:#4caf50; color:#121212; border:none; border-radius:8px; padding:10px 20px; font-weight:700;
+    cursor:pointer; transition:background 0.3s;
+  }
+  .btn-reset:hover {
+    background:#66bb6a;
+  }
+  .btn-toggle-chart {
+    margin-left: 10px; background:#e53935; color:#fff; border:none; border-radius:6px; padding:5px 10px; cursor:pointer;
+  }
+  .btn-invest {
+    margin-top:10px; background:#4caf50; color:#121212; border:none; border-radius:8px; padding:8px 16px; font-weight:700;
+    cursor:pointer; transition:background 0.3s;
+    display:block; width: 100%;
+  }
+  .btn-invest:hover {
+    background:#66bb6a;
+  }
+</style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>CoinMarket</h2>
+    <a href="#" id="btnMain">메인</a>
+    <a href="#" id="btnWallet">내 지갑</a>
+    <a href="#" id="btnSettings">설정</a>
+  </div>
+  <main id="pageMain" style="display:flex; flex-direction: column;">
+    <div class="header">
+      <input type="text" id="inputSearch" placeholder="코인 검색" />
+      <div class="user-label">USER</div>
+    </div>
+    <div class="portfolio-area">
+      <h3>My Crypto Portfolio</h3>
+      <div class="coin-list" id="coinContainer"></div>
+    </div>
+    <div class="chart-area">
+      <h3 id="titleChart">Bitcoin (BTC)</h3>
+      <canvas id="chartCanvas"></canvas>
+      <button class="btn-toggle-chart" id="btnToggleChart">차트 숨기기</button>
+    </div>
+  </main>
+  <main id="pageWallet" style="display:none; flex-direction: column;">
+    <h3>내 투자 현황</h3>
+    <ul class="wallet-list" id="walletContainer"></ul>
+    <div class="wallet-chart-area">
+      <h3>투자 자산 그래프</h3>
+      <canvas id="walletChart"></canvas>
+    </div>
+    <button class="btn-reset" id="btnResetWallet">투자내역 초기화</button>
+  </main>
+  <main id="pageSettings" style="display:none;">
+    <div class="settings-area">
+      <h3>설정</h3>
+      <div class="setting-row">
+        <label for="selectTheme">테마 색상:</label>
+        <select id="selectTheme">
+          <option value="dark">다크</option>
+          <option value="light">라이트</option>
+          <option value="green">그린</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label for="selectChartType">차트 종류:</label>
+        <select id="selectChartType">
+          <option value="line">선 그래프</option>
+          <option value="bar">막대 그래프</option>
+        </select>
+      </div>
+    </div>
+  </main>
+<script>
+  const coins = [
+    {name:'Bitcoin', id:'bitcoin', symbol:'BTC', color:'#4caf50'},
+    {name:'Ethereum', id:'ethereum', symbol:'ETH', color:'#2196f3'},
+    {name:'Solana', id:'solana', symbol:'SOL', color:'#9c27b0'},
+    {name:'XRP', id:'ripple', symbol:'XRP', color:'#ff9800'},
+    {name:'Cardano', id:'cardano', symbol:'ADA', color:'#4caf50'},
+    {name:'Dogecoin', id:'dogecoin', symbol:'DOGE', color:'#795548'},
+    {name:'Polkadot', id:'polkadot', symbol:'DOT', color:'#e91e63'},
+    {name:'Litecoin', id:'litecoin', symbol:'LTC', color:'#9e9e9e'},
+    {name:'Avalanche', id:'avalanche-2', symbol:'AVAX', color:'#f44336'},
+    {name:'Chainlink', id:'chainlink', symbol:'LINK', color:'#673ab7'},
+    {name:'Uniswap', id:'uniswap', symbol:'UNI', color:'#e91e63'},
+    {name:'Polygon', id:'polygon', symbol:'MATIC', color:'#6a1b9a'},
+    {name:'Tron', id:'tron', symbol:'TRX', color:'#ff5722'},
+    {name:'Stellar', id:'stellar', symbol:'XLM', color:'#283593'},
+    {name:'ICP', id:'internet-computer', symbol:'ICP', color:'#3f51b5'},
+    {name:'NEAR', id:'near', symbol:'NEAR', color:'#009688'},
+    {name:'VeChain', id:'vechain', symbol:'VET', color:'#607d8b'},
+    {name:'Aptos', id:'aptos', symbol:'APT', color:'#e57373'},
+    {name:'Cosmos', id:'cosmos', symbol:'ATOM', color:'#607d8b'},
+    {name:'The Graph', id:'the-graph', symbol:'GRT', color:'#3f51b5'}
+  ];
+
+  let wallet = {balance: 1000000, holds: {}};
+  let chartType = 'line';
+  let chartHidden = false;
+  let prices = {};
+  let currentCoin = null;
+  let mainChart = null;
+  let walletChart = null;
+
+  function loadPrices(cb){
+    let ids = coins.map(c=>c.id).join(',');
+    fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`)
+      .then(res => res.json())
+      .then(data => cb(data))
+      .catch(()=>alert('가격 정보 불러오기 실패'));
+  }
+
+  function showCoins(data){
+    let cont = document.getElementById('coinContainer');
+    cont.innerHTML = '';
+    coins.forEach(c=>{
+      let p = data[c.id]?.usd?.toFixed(2) || 'N/A';
+      let ch = data[c.id]?.usd_24h_change?.toFixed(2) || '0.00';
+      let cls = ch < 0 ? 'change-negative' : 'change-positive';
+      let div = document.createElement('div');
+      div.className = 'coin-item';
+      div.innerHTML = `<strong>${c.name}</strong><div class="price">$${p}</div><div class="change-rate ${cls}">${ch}%</div><button class="btn-invest">투자하기</button>`;
+      div.querySelector('.btn-invest').onclick = e => {
+        e.stopPropagation();
+        investCoin(c);
+      };
+      div.onclick = () => showChart(c);
+      cont.appendChild(div);
+      prices[c.id] = parseFloat(p) || 0;
+    });
+  }
+
+  function investCoin(c){
+    let price = prices[c.id];
+    if(!price) return alert('가격 정보 없음');
+    if(wallet.balance < price) return alert('잔액 부족');
+    if(!wallet.holds[c.name]){
+      wallet.holds[c.name] = { investedPrice: price, amount: 1, currentPrice: price };
+    } else {
+      wallet.holds[c.name].amount += 1;
+      wallet.holds[c.name].currentPrice = price;
+    }
+    wallet.balance -= price;
+    updateWallet();
+  }
+
+  function updateWallet(){
+    let cont = document.getElementById('walletContainer');
+    cont.innerHTML = '';
+    for(let name in wallet.holds){
+      let hold = wallet.holds[name];
+      let investedTotal = hold.investedPrice * hold.amount;
+      let currentTotal = prices[coins.find(c=>c.name===name).id]*hold.amount;
+      let profit = currentTotal - investedTotal;
+      let li = document.createElement('li');
+      li.innerHTML = `<span>${name}</span><span>투자: $${investedTotal.toFixed(2)}</span><span>현재: $${currentTotal.toFixed(2)}</span><span>수익: $${profit.toFixed(2)}</span>`;
+      cont.appendChild(li);
+    }
+    let totalProfit = Object.keys(wallet.holds).reduce((acc, name)=>{
+      let hold = wallet.holds[name];
+      let investedTotal = hold.investedPrice * hold.amount;
+      let currentTotal = prices[coins.find(c=>c.name===name).id]*hold.amount;
+      return acc + (currentTotal - investedTotal);
+    }, 0);
+    let totalAssets = wallet.balance + Object.keys(wallet.holds).reduce((acc, name)=>{
+      let hold = wallet.holds[name];
+      let currentTotal = prices[coins.find(c=>c.name===name).id]*hold.amount;
+      return acc + currentTotal;
+    }, 0);
+
+    let liTotal = document.createElement('li');
+    liTotal.style.fontWeight = '700';
+    liTotal.style.marginTop = '10px';
+    liTotal.innerHTML = `<span>잔액: $${wallet.balance.toFixed(2)}</span><span>총 수익: $${totalProfit.toFixed(2)}</span><span>총 자산: $${totalAssets.toFixed(2)}</span>`;
+    cont.appendChild(liTotal);
+
+    drawWalletChart();
+  }
+
+  function showChart(c){
+    if(chartHidden) return;
+    document.getElementById('titleChart').textContent = `${c.name} (${c.symbol})`;
+    fetch(`https://api.coingecko.com/api/v3/coins/${c.id}/market_chart?vs_currency=usd&days=30&interval=daily`)
+      .then(res=>{
+        if(!res.ok) throw new Error('차트 데이터 없음');
+        return res.json();
+      })
+      .then(data=>{
+        let labels = data.prices.map(p=>{
+          let d = new Date(p[0]);
+          return `${d.getMonth()+1}/${d.getDate()}`;
+        });
+        let vals = data.prices.map(p=>p[1]);
+        if(mainChart) mainChart.destroy();
+        let ctx = document.getElementById('chartCanvas').getContext('2d');
+        mainChart = new Chart(ctx, {
+          type: chartType,
+          data:{
+            labels: labels,
+            datasets:[{
+              label:`${c.name} 가격`,
+              data: vals,
+              borderColor: c.color,
+              backgroundColor: chartType==='bar'?c.color:'transparent',
+              fill: chartType==='bar',
+              tension: 0.3,
+              pointRadius: 3,
+              pointHoverRadius: 6
+            }]
+          },
+          options:{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales:{
+              y:{
+                beginAtZero:false,
+                ticks:{
+                  maxTicksLimit:6
+                }
+              },
+              x:{
+                ticks:{
+                  maxTicksLimit:7,
+                  maxRotation: 0,
+                  minRotation: 0
+                }
+              }
+            },
+            interaction: {
+              mode: 'nearest',
+              intersect: false
+            },
+            plugins:{
+              tooltip:{
+                enabled:true,
+                callbacks:{
+                  label(context){
+                    return `가격: $${context.parsed.y.toFixed(2)}`;
+                  },
+                  title(context){
+                    return `날짜: ${context[0].label}`;
+                  }
+                }
+              }
+            }
+          }
+        });
+        currentCoin = c;
+      })
+      .catch(()=>alert('차트 데이터 불러오기 실패'));
+  }
+
+  function drawWalletChart(){
+    if(walletChart) walletChart.destroy();
+    let ctx = document.getElementById('walletChart').getContext('2d');
+    let labels = Object.keys(wallet.holds);
+    if(labels.length === 0){
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      return;
+    }
+    let data = labels.map(name => {
+      let hold = wallet.holds[name];
+      return prices[coins.find(c=>c.name===name).id]*hold.amount;
+    });
+    let colors = labels.map(name => coins.find(c=>c.name===name).color);
+    walletChart = new Chart(ctx, {
+      type: 'bar',
+      data:{
+        labels: labels,
+        datasets:[{
+          label: '현재 가치 (USD)',
+          data: data,
+          backgroundColor: colors
+        }]
+      },
+      options:{
+        responsive: true,
+        maintainAspectRatio: false,
+        scales:{
+          y:{
+            beginAtZero:true,
+            ticks:{
+              maxTicksLimit:6
+            }
+          }
+        },
+        plugins:{
+          legend:{display:false},
+          tooltip:{
+            callbacks:{
+              label(ctx){
+                return `$${ctx.parsed.y.toFixed(2)}`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  document.getElementById('inputSearch').addEventListener('input', e=>{
+    let txt = e.target.value.toLowerCase();
+    let list = document.getElementById('coinContainer').children;
+    for(let el of list){
+      let name = el.querySelector('strong').textContent.toLowerCase();
+      el.style.display = name.includes(txt) ? 'block' : 'none';
+    }
+  });
+
+  document.getElementById('btnMain').onclick = e => {
+    e.preventDefault();
+    document.getElementById('pageMain').style.display = 'flex';
+    document.getElementById('pageWallet').style.display = 'none';
+    document.getElementById('pageSettings').style.display = 'none';
+  };
+  document.getElementById('btnWallet').onclick = e => {
+    e.preventDefault();
+    document.getElementById('pageMain').style.display = 'none';
+    document.getElementById('pageWallet').style.display = 'flex';
+    document.getElementById('pageSettings').style.display = 'none';
+    updateWallet();
+  };
+  document.getElementById('btnSettings').onclick = e => {
+    e.preventDefault();
+    document.getElementById('pageMain').style.display = 'none';
+    document.getElementById('pageWallet').style.display = 'none';
+    document.getElementById('pageSettings').style.display = 'block';
+  };
+
+  document.getElementById('selectChartType').onchange = e => {
+    chartType = e.target.value;
+    if(currentCoin) showChart(currentCoin);
+  };
+
+  document.getElementById('selectTheme').onchange = e => {
+    let val = e.target.value;
+    if(val === 'dark'){
+      document.body.style.background = '#121212';
+      document.body.style.color = '#eee';
+    } else if(val === 'light'){
+      document.body.style.background = '#f9f9f9';
+      document.body.style.color = '#222';
+    } else if(val === 'green'){
+      document.body.style.background = '#e8f5e9';
+      document.body.style.color = '#2e7d32';
+    }
+  };
+
+  document.getElementById('btnToggleChart').onclick = () => {
+    chartHidden = !chartHidden;
+    let area = document.querySelector('.chart-area');
+    if(chartHidden){
+      area.style.display = 'none';
+      document.getElementById('btnToggleChart').textContent = '차트 보이기';
+    } else {
+      area.style.display = 'block';
+      document.getElementById('btnToggleChart').textContent = '차트 숨기기';
+      if(currentCoin) showChart(currentCoin);
+    }
+  };
+
+  document.getElementById('btnResetWallet').onclick = () => {
+    if(confirm('투자내역을 모두 초기화하시겠습니까?')){
+      wallet.holds = {};
+      wallet.balance = 1000000;
+      updateWallet();
+    }
+  };
+
+  function update(){
+    loadPrices(data=>{
+      prices = {};
+      coins.forEach(c=>{
+        prices[c.id] = data[c.id]?.usd || 0;
+      });
+      showCoins(data);
+      updateWallet();
+      if(currentCoin) showChart(currentCoin);
+    });
+  }
+
+  update();
+  setInterval(update, 60000); 
+
+</script>
+</body>
+</html>

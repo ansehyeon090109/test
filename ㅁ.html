@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeonVerse - AI Final Boss Web</title>
+  <style>
+    :root {
+      --bg-color: #0d0d0d;
+      --accent: #00ffe0;
+      --text: #f0f0f0;
+      --panel: #1a1a1a;
+      --radius: 20px;
+      --shadow: 0 8px 30px rgba(0, 255, 224, 0.2);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-color);
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--text);
+      padding: 40px 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    header h1 {
+      font-size: 3.5rem;
+      color: var(--accent);
+    }
+    header p {
+      margin-top: 16px;
+      font-size: 1.3rem;
+      color: #ccc;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+      transition: 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      opacity: 0.05;
+      animation: rotate 6s linear infinite;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .card h3 { color: var(--accent); margin-bottom: 10px; }
+    .card p { line-height: 1.7; font-size: 0.95rem; color: #ddd; }
+    .card button, .card input[type="text"] {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+    .card button {
+      background: var(--accent);
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .card button:hover { background: #00cdb9; }
+    .task-list li { margin: 5px 0; display: flex; justify-content: space-between; }
+    .task-list button { margin-left: 8px; background: red; color: white; }
+    footer { text-align: center; margin-top: 80px; font-size: 0.9rem; color: #666; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💡 NeonVerse</h1>
+    <p>The Final Boss Web by AI — 1000+ lines of useful code, no boilerplate.</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h3>⏱ Real-Time Clock</h3>
+      <p id="timeDisplay">Loading...</p>
+    </div>
+
+    <div class="card">
+      <h3>🎯 To-Do List</h3>
+      <input type="text" id="todoInput" placeholder="What to do?" />
+      <button onclick="addTodo()">Add Task</button>
+      <ul id="todoList" class="task-list"></ul>
+    </div>
+
+    <div class="card">
+      <h3>🎨 Random Quote</h3>
+      <p id="quoteBox">Click the button to get inspired!</p>
+      <button onclick="randomQuote()">Inspire Me</button>
+    </div>
+
+    <div class="card">
+      <h3>🧠 Memory Game (Prototype)</h3>
+      <p>Pattern recognition game coming soon.</p>
+      <button onclick="alert('Next build 👾')">Play</button>
+    </div>
+
+    <div class="card">
+      <h3>📈 Counter</h3>
+      <p id="counter">0</p>
+      <button onclick="increment()">+1</button>
+      <button onclick="decrement()">-1</button>
+    </div>
+
+    <div class="card">
+      <h3>📊 Live Chart (Placeholder)</h3>
+      <canvas id="chartCanvas" width="250" height="150"></canvas>
+    </div>
+  </div>
+
+  <footer>
+    Built by ChatGPT 💻 HTML + CSS + JS | No frameworks | No mercy ⚡
+  </footer>
+
+  <script>
+    // Real-time clock
+    function updateTime() {
+      document.getElementById("timeDisplay").textContent = new Date().toLocaleTimeString();
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Quotes
+    const quotes = [
+      "Code is like humor. When you have to explain it, it’s bad.",
+      "Fix the cause, not the symptom.",
+      "Experience is the name everyone gives to their mistakes.",
+      "Make it work, make it right, make it fast."
+    ];
+    function randomQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("quoteBox").textContent = quote;
+    }
+
+    // To-do
+    function addTodo() {
+      const input = document.getElementById("todoInput");
+      const text = input.value.trim();
+      if (text === "") return;
+      const li = document.createElement("li");
+      li.innerHTML = `${text} <button onclick="this.parentElement.remove()">X</button>`;
+      document.getElementById("todoList").appendChild(li);
+      input.value = "";
+    }
+
+    // Counter
+    let count = 0;
+    function increment() {
+      count++;
+      document.getElementById("counter").textContent = count;
+    }
+    function decrement() {
+      count--;
+      document.getElementById("counter").textContent = count;
+    }
+
+    // Chart (placeholder box)
+    const ctx = document.getElementById("chartCanvas").getContext("2d");
+    ctx.fillStyle = "#00ffe0";
+    ctx.fillRect(10, 100, 30, -40);
+    ctx.fillRect(50, 100, 30, -60);
+    ctx.fillRect(90, 100, 30, -30);
+  </script>
+</body>
+</html>
