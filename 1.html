@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>디자인 요소 JS 예제</title>
+  <style>
+    /* 박스 기본 스타일 */
+    #box {
+      width: 200px;
+      height: 100px;
+      background-color: lightgray;
+      line-height: 100px;
+      text-align: center;
+      margin: 20px auto;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+
+    /* active 클래스가 붙으면 스타일 변경 */
+    .active {
+      background-color: orange;
+      color: white;
+      border: 3px solid red;
+    }
+
+    /* fade-in 애니메이션 정의 */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* fade-in 클래스에 애니메이션 적용 */
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+    }
+  </style>
+</head>
+<body>
+
+<div id="box">박스입니다</div>
+<button id="toggleBtn">스타일 토글</button>
+
+<script>
+  // 박스 요소 선택
+  const box = document.getElementById('box');
+
+  // 버튼 요소 선택
+  const toggleBtn = document.getElementById('toggleBtn');
+
+  // 버튼 클릭 시 실행할 함수 등록
+  toggleBtn.addEventListener('click', () => {
+    // 박스에 active 클래스가 없으면 추가, 있으면 제거
+    box.classList.toggle('active');
+
+    // fade-in 애니메이션 효과 추가
+    box.classList.add('fade-in');
+
+    // 애니메이션이 끝나면 fade-in 클래스 제거해서
+    // 다시 클릭할 때 애니메이션 다시 적용 가능하도록 함
+    box.addEventListener('animationend', () => {
+      box.classList.remove('fade-in');
+    }, { once: true });
+  });
+</script>
+
+</body>
+</html>
