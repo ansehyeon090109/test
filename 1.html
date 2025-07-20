@@ -2,66 +2,49 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>디자인 요소 JS 예제</title>
-  <style>
-    /* 박스 기본 스타일 */
-    #box {
-      width: 200px;
-      height: 100px;
-      background-color: lightgray;
-      line-height: 100px;
-      text-align: center;
-      margin: 20px auto;
-      font-size: 18px;
-      transition: background-color 0.3s ease;
-    }
-
-    /* active 클래스가 붙으면 스타일 변경 */
-    .active {
-      background-color: orange;
-      color: white;
-      border: 3px solid red;
-    }
-
-    /* fade-in 애니메이션 정의 */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* fade-in 클래스에 애니메이션 적용 */
-    .fade-in {
-      animation: fadeIn 1s ease forwards;
-    }
-  </style>
+  <title>기본 구역 설정</title>
 </head>
 <body>
 
-<div id="box">박스입니다</div>
-<button id="toggleBtn">스타일 토글</button>
+  <!-- 헤더: 사이트 상단 영역 -->
+  <header>
+    <h1>사이트 제목</h1>
+  </header>
 
-<script>
-  // 박스 요소 선택
-  const box = document.getElementById('box');
+  <!-- 네비게이션: 메뉴 -->
+  <nav>
+    <ul>
+      <li><a href="#section1">섹션 1</a></li>
+      <li><a href="#section2">섹션 2</a></li>
+      <li><a href="#section3">섹션 3</a></li>
+    </ul>
+  </nav>
 
-  // 버튼 요소 선택
-  const toggleBtn = document.getElementById('toggleBtn');
+  <!-- 메인 콘텐츠 영역 -->
+  <main>
+    <!-- 첫 번째 구역 -->
+    <section id="section1">
+      <h2>섹션 1 제목</h2>
+      <p>섹션 1 내용</p>
+    </section>
 
-  // 버튼 클릭 시 실행할 함수 등록
-  toggleBtn.addEventListener('click', () => {
-    // 박스에 active 클래스가 없으면 추가, 있으면 제거
-    box.classList.toggle('active');
+    <!-- 두 번째 구역 -->
+    <section id="section2">
+      <h2>섹션 2 제목</h2>
+      <p>섹션 2 내용</p>
+    </section>
 
-    // fade-in 애니메이션 효과 추가
-    box.classList.add('fade-in');
+    <!-- 세 번째 구역 -->
+    <section id="section3">
+      <h2>섹션 3 제목</h2>
+      <p>섹션 3 내용</p>
+    </section>
+  </main>
 
-    // 애니메이션이 끝나면 fade-in 클래스 제거해서
-    // 다시 클릭할 때 애니메이션 다시 적용 가능하도록 함
-    box.addEventListener('animationend', () => {
-      box.classList.remove('fade-in');
-    }, { once: true });
-  });
-</script>
+  <!-- 푸터: 사이트 하단 영역 -->
+  <footer>
+    <p>© 2025 내 사이트</p>
+  </footer>
 
 </body>
 </html>
